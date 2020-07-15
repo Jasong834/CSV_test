@@ -25,7 +25,7 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
   String _p2;
   int _p3;
   int _p4;
-
+  var total;
   String _fileName;
   String _path;
   Map<String, String> _paths;
@@ -168,26 +168,20 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
     final myData = await rootBundle.loadString(path);
     List<List<dynamic>> csvTable = CsvToListConverter().convert(myData);
     data = csvTable;
-
-    for (var i = 1; i < data.length - 1; i++) {
-      var datos = data[i];
-      _p1 = datos[0];
-      _p2 = datos[1];
-      _p3 = datos[2];
-      _p4 = datos[3];
-
-      submit.param1 = _p1;
-      submit.param2 = _p2;
-      submit.param3 = _p3;
-      submit.param4 = _p4;
-      //print(submit.param1);
-    }
-
+    total = data.length;
     setState(() {});
   }
 
   subb(SubmitModel submit) async {
-    //formKey.currentState.save();
-    providers.subirDatos(submit);
+    print(total);
+    for (var i = 1; i < total; i++) {
+      var datos;
+      datos = data[i];
+      submit.param1 = datos[0];
+      submit.param2 = datos[1];
+      submit.param3 = datos[2];
+      submit.param4 = datos[3];
+      providers.subirDatos(submit);
+    }
   }
 }

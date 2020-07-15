@@ -12,6 +12,7 @@ class Provider {
   final String _url = 'https://flutter-varios-f1115.firebaseio.com';
 
   Future<bool> subirDatos(SubmitModel submit) async {
+    print(submit);
     final url = '$_url/submit.json';
     final resp = await http.post(url, body: submitModelToJson(submit));
 
