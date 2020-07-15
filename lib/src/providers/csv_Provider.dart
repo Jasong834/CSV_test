@@ -13,7 +13,7 @@ class Provider {
 
   Future<bool> subirDatos(SubmitModel submit) async {
     print(submit);
-    final url = '$_url/submit.json';
+    final url = '$_url/submit/${submit.param1}.json';
     final resp = await http.post(url, body: submitModelToJson(submit));
 
     final decodedData = json.decode(resp.body);
