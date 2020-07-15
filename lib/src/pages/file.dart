@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
 import 'dart:convert';
@@ -8,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../models/csv_Model.dart';
+
 class FilePickerDemo extends StatefulWidget {
   @override
   _FilePickerDemoState createState() => new _FilePickerDemoState();
@@ -15,8 +16,8 @@ class FilePickerDemo extends StatefulWidget {
 
 class _FilePickerDemoState extends State<FilePickerDemo> {
   final formKey = GlobalKey<FormState>();
-  
-  SubmitModel submit = new  SubmitModel();
+
+  SubmitModel submit = new SubmitModel();
   Provider providers = new Provider();
   final firestoreInstance = Firestore.instance;
 
@@ -24,7 +25,6 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
   String _p2;
   int _p3;
   int _p4;
-
 
   String _fileName;
   String _path;
@@ -81,72 +81,6 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // new Padding(
-                //   padding: const EdgeInsets.only(top: 20.0),
-                //   child: new DropdownButton(
-                //       hint: new Text('LOAD PATH FROM'),
-                //       value: _pickingType,
-                //       items: <DropdownMenuItem>[
-                //         new DropdownMenuItem(
-                //           child: new Text('FROM AUDIO'),
-                //           value: FileType.audio,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('FROM IMAGE'),
-                //           value: FileType.image,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('FROM VIDEO'),
-                //           value: FileType.video,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('FROM ANY'),
-                //           value: FileType.any,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('CUSTOM FORMAT'),
-                //           value: FileType.custom,
-                //         ),
-                //       ],
-                //       onChanged: (value) => setState(() {
-                //             _pickingType = value;
-                //             if (_pickingType != FileType.custom) {
-                //               _controller.text = _extension = '';
-                //             }
-                //           })),
-                // ),
-                // new ConstrainedBox(
-                //   constraints: BoxConstraints.tightFor(width: 100.0),
-                //   child: _pickingType == FileType.custom
-                //       ? new TextFormField(
-                //           maxLength: 15,
-                //           autovalidate: true,
-                //           controller: _controller,
-                //           decoration:
-                //               InputDecoration(labelText: 'File extension'),
-                //           keyboardType: TextInputType.text,
-                //           textCapitalization: TextCapitalization.none,
-                //           validator: (value) {
-                //             RegExp reg = new RegExp(r'[^a-zA-Z0-9]');
-                //             if (reg.hasMatch(value)) {
-                //               _hasValidMime = false;
-                //               return 'Invalid format';
-                //             }
-                //             _hasValidMime = true;
-                //           },
-                //         )
-                //       : new Container(),
-                // ),
-                // new ConstrainedBox(
-                //   constraints: BoxConstraints.tightFor(width: 200.0),
-                //   child: new SwitchListTile.adaptive(
-                //     title: new Text('Pick multiple files',
-                //         textAlign: TextAlign.right),
-                //     onChanged: (bool value) =>
-                //         setState(() => _multiPick = value),
-                //     value: _multiPick,
-                //   ),
-                // ),
                 new Padding(
                   padding: const EdgeInsets.only(top: 50.0, bottom: 20.0),
                   child: new RaisedButton(
@@ -154,14 +88,13 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
                     child: new Text("Open fle picker"),
                   ),
                 ),
-                  new Padding(
+                new Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                   child: new RaisedButton(
-                    onPressed:  () => subb,
+                    onPressed: () => subb(submit),
                     child: new Text("submit"),
                   ),
                 ),
-                
                 new Builder(
                   builder: (BuildContext context) => _path != null ||
                           _paths != null
@@ -231,7 +164,7 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
     );
   }
 
- loadAsset(String path) async {
+  loadAsset(String path) async {
     final myData = await rootBundle.loadString(path);
     List<List<dynamic>> csvTable = CsvToListConverter().convert(myData);
     data = csvTable;
@@ -243,20 +176,18 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
       _p3 = datos[2];
       _p4 = datos[3];
 
-        submit.param1  =_p1;
-        submit.param2  =_p2;
-        submit.param3  =_p3;
-        submit.param4 =_p4;
-          //print(submit.param1);
+      submit.param1 = _p1;
+      submit.param2 = _p2;
+      submit.param3 = _p3;
+      submit.param4 = _p4;
+      //print(submit.param1);
     }
 
     setState(() {});
   }
 
- void subb()async{
-
-    formKey.currentState.save();
-          providers.crearJson(submit);
-
+  subb(SubmitModel submit) async {
+    //formKey.currentState.save();
+    providers.subirDatos(submit);
   }
 }
